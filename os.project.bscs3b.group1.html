@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FIFO Page Replacement Animation</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>FIFO Page Replacement Animation</h1>
+
+    <!-- Input Section -->
+    <div class="input-section">
+      <label for="pageSequence">Enter Page Sequence (comma-separated): </label>
+      <input type="text" id="pageSequence" placeholder="e.g., 7, 0, 1, 2, 0, 3">
+      <label for="memorySize">Memory Size: </label>
+      <input type="number" id="memorySize" min="1" value="3">
+      <button onclick="initializeAnimation()">Run</button>
+    </div>
+
+    <!-- Memory Table -->
+    <div class="memory-table">
+      <table id="memory">
+        <thead>
+          <tr id="tableHeader">
+            <th>Pages</th>
+          </tr>
+        </thead>
+        <tbody id="memory-body">
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <button id="pauseResumeButton" onclick="togglePauseResume()">Pause</button>
+      <button onclick="resetAnimation()">Reset</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
