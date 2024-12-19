@@ -13,9 +13,9 @@
     <!-- Input Section -->
     <div class="input-section">
       <label for="pageSequence">Enter Page Sequence (comma-separated): </label>
-      <input type="text" id="pageSequence" placeholder="e.g., 7, 0, 1, 2, 0, 3"><br><br>
-      <label for="memorySize">Memory Size: </label><br>
-      <input type="number" id="memorySize" min="1" value="3"><br><br>
+      <input type="text" id="pageSequence" placeholder="e.g., 7, 0, 1, 2, 0, 3, 0, 4"><br><br>
+      <label for="memorySize">Enter Memory Size: </label><br>
+      <input type="number" id="memorySize" min="1"  value="3"><br>
       <button onclick="initializeAnimation()">Run</button>
     </div>
 
@@ -29,13 +29,30 @@
         </thead>
         <tbody id="memory-body">
         </tbody>
+        <tfoot>
+          <tr id="faultHitRow">
+            <th>Result</th>
+          </tr>
+        </tfoot>
       </table>
+    </div>
+
+    <!-- Results Section -->
+    <div class="results">
+      <p id="pageFaults">Page Faults: 0</p>
+      <p id="pageHits">Page Hits: 0</p>
     </div>
 
     <!-- Controls -->
     <div class="controls">
       <button id="pauseResumeButton" onclick="togglePauseResume()">Pause</button>
       <button onclick="resetAnimation()">Reset</button>
+    </div>
+    
+    <!-- Placeholder Section -->
+    <div class="students">
+      <p><br><br><strong>Group 1:</strong></p>
+      <p id="studentList">Baclig, Ophir Jemuel R.<br>Balubar, Reden<br>Bayle, Reingel T.<br>Combis, Julius O.<br>Jaramillo, Jayson B.</p>
     </div>
   </div>
 
