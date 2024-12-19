@@ -4,6 +4,8 @@ let pageSequence = []; // Input page sequence
 let currentPageIndex = 0;
 let intervalId = null;
 let isPaused = false; // Tracks the pause state
+let pageFaults = 0; // Total page faults
+let pageHits = 0; // Total page hits
 
 // Initialize and start the animation
 function initializeAnimation() {
@@ -48,6 +50,8 @@ function resetAnimation(memorySize) {
   fifoQueue = [];
   currentPageIndex = 0;
   isPaused = false;
+  pageFaults = 0;
+  pageHits = 0;
 
   // Reset button text
   const pauseResumeButton = document.getElementById("pauseResumeButton");
@@ -56,13 +60,19 @@ function resetAnimation(memorySize) {
   // Clear and rebuild the memory table dynamically
   const memoryBody = document.getElementById("memory-body");
   const headerRow = document.getElementById("tableHeader");
+  const faultHitRow = document.getElementById("faultHitRow");
   memoryBody.innerHTML = "";
   headerRow.innerHTML = `<th>Pages</th>`;
+  faultHitRow.innerHTML = `<th>Result</th>`;
 
-  pageSequence.forEach((page) => {
+  pageSequence.forEach((page, index) => {
     const col = document.createElement("th");
     col.textContent = page; // Add page numbers to the header
     headerRow.appendChild(col);
+
+    const resultCol = document.createElement("td");
+    resultCol.id = `faultHit-${index}`;
+    faultHitRow.appendChild(resultCol);
   });
 
   // Create rows for memory slots (dynamic based on memory size)
@@ -74,6 +84,10 @@ function resetAnimation(memorySize) {
     row.appendChild(rowHeader);
     memoryBody.appendChild(row);
   }
+
+  // Reset totals
+  document.getElementById("pageFaults").textContent = `Page Faults: 0`;
+  document.getElementById("pageHits").textContent = `Page Hits: 0`;
 }
 
 // Handle the next page in the sequence
@@ -91,6 +105,7 @@ function animateNextPage(memorySize) {
   if (pageIndex === -1) {
     // Page fault
     pageFault = true;
+    pageFaults++;
     if (fifoQueue.length < memorySize) {
       // Add page to memory and queue
       fifoQueue.push(page);
@@ -102,23 +117,30 @@ function animateNextPage(memorySize) {
       fifoQueue.push(page);
       memorySlots[replaceIndex] = page;
     }
+  } else {
+    // Page hit
+    pageHits++;
   }
 
-  updateMemoryDisplay(pageFault, page);
+  updateMemoryDisplay(pageFault);
   currentPageIndex++;
 }
 
-// Update the memory table on the screen
-function updateMemoryDisplay(pageFault, page) {
+// Update the memory table and results
+function updateMemoryDisplay(pageFault) {
   for (let i = 0; i < memorySlots.length; i++) {
     const row = document.getElementById(`row-${i}`);
     const cell = document.createElement("td");
     cell.textContent = memorySlots[i] !== null ? memorySlots[i] : "-";
-
-    if (memorySlots[i] === page) {
-      cell.className = pageFault ? "page-fault" : "page-hit";
-    }
-
     row.appendChild(cell);
   }
+
+  // Update the fault/hit indicator
+  const faultHitCell = document.getElementById(`faultHit-${currentPageIndex}`);
+  faultHitCell.textContent = pageFault ? "X" : "✓";
+  faultHitCell.className = pageFault ? "page-fault" : "page-hit";
+
+  // Update totals
+  document.getElementById("pageFaults").textContent = `Page Faults: ${pageFaults}`;
+  document.getElementById("pageHits").textContent = `Page Hits: ${pageHits}`;
 }
